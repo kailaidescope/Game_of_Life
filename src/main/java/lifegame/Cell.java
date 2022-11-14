@@ -1,10 +1,9 @@
 package lifegame;
 
-import javafx.scene.Node;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 
 import java.security.InvalidParameterException;
-import java.util.Arrays;
 
 public class Cell extends Pane {
 
@@ -120,6 +119,14 @@ public class Cell extends Pane {
         return false;
     }
 
+    public int getNumNeighbors(){
+        int numNeighbors = 0;
+        for(Cell c : aNeighbors){
+            if(c != null){ numNeighbors++; }
+        }
+        return numNeighbors;
+    }
+
     public String toString(){
         int numNeighbors = 0;
 
@@ -129,7 +136,8 @@ public class Cell extends Pane {
             }
         }
 
-        return "Cell with " + numNeighbors + " neighbor(s)";
+        return "["+numNeighbors+"]";
+        //return "Cell with " + numNeighbors + " neighbor(s)";
     }
 
 }
