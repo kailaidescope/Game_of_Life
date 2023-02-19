@@ -48,10 +48,10 @@ public class Life {
             for(int j = 0;j<pMatrixWidth;j++){
 
                 // Set alive status according to odds provided
-                boolean true20 = (new Random().nextInt((int) (1/pAliveChance)) == 0) ? true : false;
+                boolean aliveness = (new Random().nextInt((int) (1/pAliveChance)) == 0) ? true : false;
 
                 // Initialize each cell with a random alive value
-                Cell c = new Cell(true20,cellHeight,cellWidth);
+                Cell c = new Cell(aliveness,cellHeight,cellWidth);
 
                 // Input cells into array
                 aCellArray[i][j] = c;
@@ -65,37 +65,21 @@ public class Life {
         // (i is y index and j is x index)
         for(int i = 0;i<pMatrixHeight;i++){
             for(int j = 0;j<pMatrixWidth;j++){
-                Cell[] neighbors = new Cell[8];
-                int[][] primeDirections = {{1,0},{0,1},{-1,0},{0,-1}};
+                Cell c = (Cell)aCellMatrix.getChildren().get(i*pMatrixWidth+j);
 
-                if(i==0){primeDirections[2] = null;}
-                if(i==pMatrixHeight-1){primeDirections[0] = null;}
-                if(j==0){primeDirections[3] = null;}
-                if(j==pMatrixWidth-1){primeDirections[1] = null;}
-
-                Cell currentCell = ((Cell)aCellMatrix.getChildren().get(i*pMatrixWidth+j));
-
-                // Concatenate directions to possible directions
-                for(int k = 0;k<4;k++){
-
-                    // Iterate through possible prime directions
-                    if(primeDirections[k] != null){
-                        int y = i + primeDirections[k][0];
-                        int x = j + primeDirections[k][1];
-
-                        // Get + add neighbor in given prime direction
-                        Cell c = (Cell)aCellMatrix.getChildren().get((i+primeDirections[k][0])*pMatrixWidth+(j+primeDirections[k][1]));
-                        currentCell.addNeighbor((Cell)aCellMatrix.getChildren().get((i+primeDirections[k][0])*pMatrixWidth+(j+primeDirections[k][1])));
-
-                        // Combine directions to find neighbors
-                        for(int l = k+1;l<4;l++){
-                            if(primeDirections[l] != null){
-                                currentCell.addNeighbor((Cell)aCellMatrix.getChildren().get((i+primeDirections[l][0]+primeDirections[k][0])*pMatrixWidth+(j+primeDirections[l][1]+primeDirections[k][1])));
+                // Add modifiers
+                for(int y = -1;y<2;y++){
+                    if((i+y)>=0 && (i+y)<pMatrixHeight){
+                        for(int x = -1;x<2;x++){
+                            if((j+x)>=0 && (j+x)<pMatrixWidth && !(x == 0 && y == 0)){
+                                c.addNeighbor((Cell)aCellMatrix.getChildren()
+                                        .get((i+y)*pMatrixWidth+(j+x)));
                             }
                         }
-                        //System.out.println((Cell)aCellMatrix.getChildren().get(i*pMatrixWidth+j));
                     }
                 }
+
+                //System.out.println("("+i+", "+j+"): "+(aCellMatrix.getChildren().get(i*pMatrixWidth+j) == aCellArray[i][j])+", "+c.getNumNeighbors());
             }
         }
     }
@@ -111,6 +95,9 @@ public class Life {
      * Steps the board one step forward
      */
     public void iterate(){
+        for(int j = 0;j<aCellMatrix.getChildren().size();j++){
+            ((Cell)aCellMatrix.getChildren().get(j)).calculateNextAlive();
+        }
         for(int j = 0;j<aCellMatrix.getChildren().size();j++){
             ((Cell)aCellMatrix.getChildren().get(j)).updateAlive();
         }

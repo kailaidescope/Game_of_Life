@@ -1,5 +1,6 @@
 package lifegame;
 
+import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 
@@ -32,12 +33,20 @@ public class Cell extends Pane {
      * @param pPrefHeight cell height
      * @param pPrefWidth cell width
      */
-    public Cell(boolean pAlive,int pPrefHeight, int pPrefWidth){
+    public Cell(boolean pAlive,int pPrefHeight, int pPrefWidth) {
         setAlive(pAlive);
         aNeighbors = new Cell[8];
 
         // Set dimension attributes
-        this.setPrefSize(pPrefWidth,pPrefHeight);
+        this.setPrefSize(pPrefWidth, pPrefHeight);
+        this.setOnMouseEntered(e -> {
+            if(e.isAltDown()){
+                this.setAlive(!this.aAlive);
+            }
+        });
+        this.setOnMouseClicked(e -> {
+            this.setAlive(!this.aAlive);
+        });
     }
 
     /**
@@ -133,12 +142,11 @@ public class Cell extends Pane {
     }
 
     /**
-     * Calculate next alive status and apply it to this cell
+     * Apply next alive status to this cell
      *
      * @return new alive status
      */
     public boolean updateAlive(){
-        calculateNextAlive();
         aAlive = aNextAlive;
         aNextAlive = false;
         updateColor();

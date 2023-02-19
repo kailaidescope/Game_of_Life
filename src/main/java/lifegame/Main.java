@@ -21,6 +21,7 @@ public class Main extends Application{
     private static final double animationFrameDelay = 0.2;
     private static final int[] aScreenDimensions = {650,600};
     private static final int[] aControlDimensions = {50,600};
+    private static final int[] aCellDimensions = {50,50};
 
     public static void main(String[] args){
         Application.launch(Main.class, args);
@@ -36,7 +37,7 @@ public class Main extends Application{
 
         Timeline timeline = new Timeline();
 
-        aGameOfLife = new Life(100,100, aScreenDimensions[0]-aControlDimensions[0], aScreenDimensions[1], 0.15);
+        aGameOfLife = new Life(aCellDimensions[0], aCellDimensions[1], aScreenDimensions[0]-aControlDimensions[0], aScreenDimensions[1], 0.15);
 
         // HANDLE GUI
 
@@ -91,7 +92,7 @@ public class Main extends Application{
             // Stop simulation
             timeline.pause();
 
-            aGameOfLife = new Life(100,100, aScreenDimensions[0]-aControlDimensions[0], aScreenDimensions[1], 0.15);
+            aGameOfLife = new Life(aCellDimensions[0], aCellDimensions[1], aScreenDimensions[0]-aControlDimensions[0], aScreenDimensions[1], 0.15);
             vBox.getChildren().set(0,aGameOfLife.getCellMatrix());
             aStage.show();
 
@@ -103,7 +104,7 @@ public class Main extends Application{
             // Stop simulation
             timeline.pause();
 
-            aGameOfLife = new Life(100,100, aScreenDimensions[0]-aControlDimensions[0], aScreenDimensions[1], 0);
+            aGameOfLife = new Life(aCellDimensions[0], aCellDimensions[1], aScreenDimensions[0]-aControlDimensions[0], aScreenDimensions[1], 0);
             vBox.getChildren().set(0,aGameOfLife.getCellMatrix());
             aStage.show();
 
