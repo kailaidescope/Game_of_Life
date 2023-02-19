@@ -25,6 +25,11 @@ public class Main extends Application{
         Application.launch(Main.class, args);
     }
 
+    /**
+     * Launches LIFE application
+     *
+     * @param pStage stage being shown
+     */
     public void start(Stage pStage){
         // HANDLE INITIALIZING GAME OBJECTS
 
