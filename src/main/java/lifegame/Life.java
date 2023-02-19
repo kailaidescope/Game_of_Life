@@ -15,7 +15,16 @@ public class Life {
     private final GridPane aCellMatrix;
     private final Cell[][] aCellArray;
 
-    public Life(int pMatrixHeight, int pMatrixWidth,int pWindowHeight, int pWindowWidth) throws InvalidParameterException {
+    /**
+     * Create game board
+     * @param pMatrixHeight desired vertical length of grid
+     * @param pMatrixWidth desired horizontal length of grid
+     * @param pWindowHeight vertical screen space for board (in pixels)
+     * @param pWindowWidth horizontal screen space for board (in pixels)
+     * @param pAliveChance chance that a cell is alive
+     * @throws InvalidParameterException
+     */
+    public Life(int pMatrixHeight, int pMatrixWidth,int pWindowHeight, int pWindowWidth, double pAliveChance) throws InvalidParameterException {
         // Check if matrix dimensions are acceptable
         if(pMatrixHeight <= 0 || pMatrixWidth <= 0){
             throw new InvalidParameterException("Cannot have a matrix width or height <= 0.");
@@ -38,8 +47,8 @@ public class Life {
         for(int i = 0;i<pMatrixHeight;i++){
             for(int j = 0;j<pMatrixWidth;j++){
 
-                // 20% chance of being true
-                boolean true20 = (new Random().nextInt(5) == 0) ? true : false;
+                // Set alive status according to odds provided
+                boolean true20 = (new Random().nextInt((int) (1/pAliveChance)) == 0) ? true : false;
 
                 // Initialize each cell with a random alive value
                 Cell c = new Cell(true20,cellHeight,cellWidth);
@@ -91,17 +100,27 @@ public class Life {
         }
     }
 
+    /**
+     * Get current board to place in JavaFX pane
+     *
+     * @return GridPane form of board
+     */
     public GridPane getCellMatrix(){return aCellMatrix;}
 
+    /**
+     * Steps the board one step forward
+     */
     public void iterate(){
-        for(int j = 0;j<aCellMatrix.getChildren().size();j++){
-            ((Cell)aCellMatrix.getChildren().get(j)).calculateNextAlive();
-        }
         for(int j = 0;j<aCellMatrix.getChildren().size();j++){
             ((Cell)aCellMatrix.getChildren().get(j)).updateAlive();
         }
     }
 
+    /**
+     * Turns board into string form
+     *
+     * @return text version of board
+     */
     public String toString(){
         String output = "";
         for(Cell[] cellRow : aCellArray){

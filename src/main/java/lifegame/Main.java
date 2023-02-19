@@ -18,6 +18,7 @@ public class Main extends Application{
     private static Life aGameOfLife;
     private static Stage aStage;
     private static Scene aGameScene;
+    private static final double animationFrameDelay = 0.2;
     private static final int[] aScreenDimensions = {650,600};
     private static final int[] aControlDimensions = {50,600};
 
@@ -35,7 +36,7 @@ public class Main extends Application{
 
         Timeline timeline = new Timeline();
 
-        aGameOfLife = new Life(100,100, aScreenDimensions[0]-aControlDimensions[0], aScreenDimensions[1]);
+        aGameOfLife = new Life(100,100, aScreenDimensions[0]-aControlDimensions[0], aScreenDimensions[1], 0.15);
 
         // HANDLE GUI
 
@@ -44,8 +45,9 @@ public class Main extends Application{
         Button nextButton = new Button("Next Iteration");
         Button playPauseButton = new Button("Play");
         Button resetButton = new Button("Randomize");
+        Button clearButton = new Button("Clear");
 
-        HBox buttonBox = new HBox(playPauseButton, nextButton,resetButton);
+        HBox buttonBox = new HBox(playPauseButton, nextButton, resetButton, clearButton);
         buttonBox.setAlignment(Pos.CENTER);
         buttonBox.setSpacing(20);
 
@@ -58,11 +60,10 @@ public class Main extends Application{
         aStage = pStage;
         aStage.setScene(aGameScene);
         aStage.show();
-        aStage.setAlwaysOnTop(true);
 
         // HANDLE ANIMATION
 
-        KeyFrame keyFrame = new KeyFrame(Duration.seconds(0.2), event -> {
+        KeyFrame keyFrame = new KeyFrame(Duration.seconds(animationFrameDelay), event -> {
             aGameOfLife.iterate();
         });
         timeline.getKeyFrames().add(keyFrame);
@@ -76,6 +77,7 @@ public class Main extends Application{
         });
 
         playPauseButton.setOnAction(e -> {
+            // Make buttons display correct text and do correct actions
             if(timeline.getStatus().equals(Animation.Status.RUNNING)){
                 playPauseButton.setText("Play");
                 timeline.pause();
@@ -89,7 +91,7 @@ public class Main extends Application{
             // Stop simulation
             timeline.pause();
 
-            aGameOfLife = new Life(100,100, aScreenDimensions[0]-aControlDimensions[0], aScreenDimensions[1]);
+            aGameOfLife = new Life(100,100, aScreenDimensions[0]-aControlDimensions[0], aScreenDimensions[1], 0.15);
             vBox.getChildren().set(0,aGameOfLife.getCellMatrix());
             aStage.show();
 
@@ -97,6 +99,16 @@ public class Main extends Application{
             playPauseButton.setText("Play");
         });
 
-        //System.out.println("A game of life matrix:\n\n"+aGameOfLife);
+        clearButton.setOnAction(e -> {
+            // Stop simulation
+            timeline.pause();
+
+            aGameOfLife = new Life(100,100, aScreenDimensions[0]-aControlDimensions[0], aScreenDimensions[1], 0);
+            vBox.getChildren().set(0,aGameOfLife.getCellMatrix());
+            aStage.show();
+
+            // Set buttons to correct text
+            playPauseButton.setText("Play");
+        });
     }
 }
